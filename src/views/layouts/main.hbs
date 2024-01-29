@@ -1,0 +1,27 @@
+{{#if layout}}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Neo4j Text2Cypher</title>
+    <link rel="icon" type="image/x-icon" href="/public/favicon.ico">
+    <link href="public/prism.css" rel="stylesheet" />
+    <link href="public/main.css" rel="stylesheet" />
+    <script src="public/htmx.min.js"></script>
+    <script src="public/main.js"></script>
+  </head>
+  <body>
+    <main hx-trigger="load" hx-post="/schema/" hx-target="#schema" hx-swap="outerHTML" hx-include="[name='database']">
+{{/if}}
+
+    {{{body}}}
+
+{{#if layout}}
+    </main>
+    <script>
+      window.Prism = window.Prism || {};
+      window.Prism.manual = true;
+    </script>
+    <script src="public/prism.js"></script>
+  </body>
+</html>
+{{/if}}

@@ -1,0 +1,16 @@
+<div class="prompt-output" id="promptOutput" data-messageId="{{messageId}}">
+  <input type="hidden" name="messageId" value="{{messageId}}" />
+  <div class="prompt-output-column">
+    <div class="prompt-output-column-scroll prompt-output-cypher">
+      <pre><code class="language-cypher" id="cypher" data-cypher="{{cypher}}">{{cypher}}</code></pre>
+    </div>
+    {{> vote cypher=cypher }}
+  </div>
+  <div class="prompt-output-column">
+    <div
+      class="prompt-output-column-scroll prompt-output-answer"
+      id="answer"
+      data-answer="{{answer}}"
+    >{{answer}}</div>
+  </div>
+</div>

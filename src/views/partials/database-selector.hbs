@@ -1,0 +1,14 @@
+<div class="database-selector">
+  <form>
+    <select
+      name="database"
+      hx-post="/schema/"
+      hx-trigger="change"
+      hx-indicator="#schema"
+    >
+      {{#each databases}}
+        <option>{{this}}</option>
+      {{/each}}
+    </select>
+  </form>
+</div>

@@ -1,0 +1,42 @@
+{
+  "name": "text2cypher",
+  "version": "1.0.0",
+  "description": "Crowdsourced cypher statement evaluation",
+  "main": "server.ts",
+  "scripts": {
+    "build": "bash build.sh",
+    "start": "nodemon dist/server.js",
+    "dev": "nodemon --exec ts-node src/server.ts"
+  },
+  "keywords": [],
+  "author": "easwee",
+  "license": "ISC",
+  "dependencies": {
+    "@fastify/autoload": "^5.0.0",
+    "@fastify/cors": "^8.4.1",
+    "@fastify/env": "^4.3.0",
+    "@fastify/formbody": "^7.4.0",
+    "@fastify/sensible": "^5.0.0",
+    "@fastify/static": "^6.12.0",
+    "@fastify/view": "^8.2.0",
+    "@langchain/community": "^0.0.20",
+    "@langchain/openai": "^0.0.12",
+    "antlr4": "^4.13.1-patch-1",
+    "fastify": "^4.0.0",
+    "fastify-cli": "^5.9.0",
+    "fastify-plugin": "^4.0.0",
+    "fluent-json-schema": "^4.2.1",
+    "handlebars": "^4.7.8",
+    "langchain": "0.1.6",
+    "neo4j-driver": "^5.15.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.9.5",
+    "browserify": "^17.0.0",
+    "nodemon": "^3.0.3",
+    "rimraf": "^5.0.5",
+    "ts-node": "^10.9.2",
+    "tsify": "^5.0.4",
+    "typescript": "^5.3.3"
+  }
+}
