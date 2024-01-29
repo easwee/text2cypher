@@ -24,6 +24,8 @@ async function startServer(fastify: FastifyInstance, opts: CustomOptions) {
       schema: S.object()
         .prop("PORT", S.number().required())
         .prop("OPENAI_API_KEY", S.string().required())
+        .prop("PROMPT_MAX_LENGTH", S.string().required())
+        .prop("DATABASES", S.string().required())
         .prop("FEEDBACK_DATABASE_URI", S.string().required())
         .prop("FEEDBACK_DATABASE_USERNAME", S.string().required())
         .prop("FEEDBACK_DATABASE_PASSWORD", S.string().required())
