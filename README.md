@@ -1,4 +1,12 @@
-## Neo4gpt server
+# text2cypher
+
+Crowdsourced cypher statement evaluation.
+
+## Deploy on your server
+
+TODO
+
+## Development
 
 Setup env:
 
