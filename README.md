@@ -32,4 +32,4 @@ Run production:
 
 `cd dist && npm start`
 
-This project is built with [Fastify](https://www.fastify.io/docs/latest/).
+This project is built with [Fastify](https://www.fastify.io/docs/latest/) ad [HTMX](https://htmx.org/).
