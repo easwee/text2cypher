@@ -24,12 +24,9 @@ async function startServer(fastify: FastifyInstance, opts: CustomOptions) {
       schema: S.object()
         .prop("PORT", S.number().required())
         .prop("OPENAI_API_KEY", S.string().required())
-        .prop("NEO4J_DB_DEMO_URI", S.string().required())
-        .prop("NEO4J_DB_DEMO_USERNAME", S.string().required())
-        .prop("NEO4J_DB_DEMO_PASSWORD", S.string().required())
-        .prop("NEO4J_DB_FEEDBACK_URI", S.string().required())
-        .prop("NEO4J_DB_FEEDBACK_USERNAME", S.string().required())
-        .prop("NEO4J_DB_FEEDBACK_PASSWORD", S.string().required())
+        .prop("FEEDBACK_DATABASE_URI", S.string().required())
+        .prop("FEEDBACK_DATABASE_USERNAME", S.string().required())
+        .prop("FEEDBACK_DATABASE_PASSWORD", S.string().required())
         .valueOf(),
     });
 

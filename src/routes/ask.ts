@@ -2,7 +2,7 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import S from "fluent-json-schema";
 import { Neo4jGraph } from "@langchain/community/graphs/neo4j_graph";
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
-import { neo4jFeedbackDriver } from "../service/neo4j";
+import { DATABASES, neo4jFeedbackDriver } from "../service/neo4j";
 // this import should be replaced with langchain import when chypher validation is implemented there
 import { GraphCypherQAChain } from "../custom/graph-cypher-qa-chain/chain";
 
@@ -74,11 +74,13 @@ export default async function ask(fastify: FastifyInstance) {
         temperature: 0,
       });
 
+      const dbConnectionData = DATABASES.find((db) => db.name == database);
+
       graph = await Neo4jGraph.initialize({
-        url: process.env.NEO4J_DB_DEMO_URI,
-        username: database,
-        password: database,
-        database: database,
+        url: dbConnectionData.uri,
+        username: dbConnectionData.username,
+        password: dbConnectionData.password,
+        database: dbConnectionData.username,
         timeoutMs: MAX_GRAPH_REQUEST_DURATION_MS,
       });
 
