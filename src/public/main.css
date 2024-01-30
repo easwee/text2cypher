@@ -223,7 +223,8 @@ pre[class*="language-"] {
   border: 0;
   box-shadow: none;
   background: transparent;
-  word-break: break-word !important;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 @keyframes mulShdSpin {
