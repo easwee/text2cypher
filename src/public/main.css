@@ -20,6 +20,14 @@
   background-color: rgba(255, 255, 255, 0.5);
 }
 
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+  transition: background-color 600000s 0s, color 600000s 0s;
+}
+input[data-autocompleted] {
+  background-color: transparent !important;
+}
+
 html,
 body,
 #root {
@@ -86,11 +94,25 @@ button.htmx-request {
   pointer-events: none;
 }
 
+button .text {
+  opacity: 1;
+  transition: opacity 200ms ease-in-out;
+}
+
 button .loader {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+button.htmx-request .loader {
+  opacity: 1;
+}
+
+button.htmx-request .text {
   opacity: 0;
 }
 
@@ -188,32 +210,29 @@ dialog::backdrop {
 }
 
 .loader {
-  vertical-align: top;
-  display: inline-block;
-  font-size: 4px;
-  width: 1em;
-  height: 1em;
+  display: block;
+  border: 0.3rem solid white;
   border-radius: 50%;
-  position: relative;
-  text-indent: -9999em;
-  animation: mulShdSpin 1.1s infinite ease;
-  transform: translateZ(0);
-  transition: all 200ms ease-in-out;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+  width: 2.4rem;
+  height: 2.4rem;
+  animation-name: loading;
+  animation-duration: 700ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
   opacity: 0;
+  transition: opacity 200ms ease-in-out;
   pointer-events: none;
 }
 
-.htmx-request {
-  pointer-events: none;
-  opacity: 0.3;
-}
-
-.htmx-request .loader {
-  opacity: 1;
-}
-
-.htmx-request .loader ~ * {
-  display: none;
+@keyframes loading {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 code[class*="language-"],
@@ -328,6 +347,34 @@ main {
   margin-top: 5rem;
   background-color: rgba(0, 0, 0, 0.3);
   border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+main .loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: top;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding-top: 30rem;
+  transition: opacity 200ms ease-in-out;
+  opacity: 0;
+  backdrop-filter: blur(3px);
+  pointer-events: none;
+}
+
+main .loading-overlay .loader {
+  opacity: 1;
+}
+
+main.htmx-request .loading-overlay {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 main .logo {
@@ -500,18 +547,6 @@ main .logo {
   font-family: monospace;
   font-size: 1.4rem;
   line-height: 1.6;
-}
-
-.schema .loader {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  opacity: 0;
-}
-
-.schema.htmx-request .loader {
-  opacity: 1;
 }
 
 /* Last prompts */

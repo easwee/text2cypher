@@ -5,7 +5,8 @@
       name="database"
       hx-post="/schema/"
       hx-trigger="change"
-      hx-indicator="#schema"
+      hx-target="#schema, #promptOutput"
+      hx-indicator="main"
     >
       {{#each databases}}
         <option>{{this}}</option>

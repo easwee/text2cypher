@@ -12,7 +12,11 @@
   </head>
   <body>
     <main hx-trigger="load" hx-post="/schema/" hx-target="#schema" hx-swap="outerHTML" hx-include="[name='database']">
-    <img src="/public/logo.svg" alt="Text2Cypher" class="logo" />
+      <img src="/public/logo.svg" alt="Text2Cypher" class="logo" />
+      <div class="loading-overlay">
+        <span class="loader"></span>
+        <p>Loading database schema. Please wait ...</p>
+      </div>
 {{/if}}
 
     {{{body}}}
