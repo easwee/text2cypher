@@ -11,6 +11,11 @@ function updatePromptCount(promptMaxlength = 300) {
   }
 }
 
+function resetPrompt(element) {
+  element.form.reset();
+  updatePromptCount();
+}
+
 function updateLastPrompts() {
   const prompt = document.querySelector('input[name="prompt"]').value;
   const cypher = document.querySelector("#cypher").dataset.cypher;
@@ -62,6 +67,11 @@ function renderLastPrompts(prompts) {
   });
 }
 
+function getQueryParam(name) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(name);
+}
+
 function initDownvoteDialog() {
   const validateCypher = document.querySelector("#validateCypher");
   const showvalidateCypher = document.querySelector("#voteDown");
@@ -95,4 +105,13 @@ window.onload = () => {
   const lastPrompts = JSON.parse(localStorage.getItem("last_prompts"));
 
   renderLastPrompts(lastPrompts);
+
+  // fill prompt from url if present
+  const promptInput = document.getElementById("promptInput");
+  const promptValue = getQueryParam("prompt");
+
+  if (promptInput && promptValue) {
+    promptInput.value = decodeURIComponent(promptValue.replace(/\+/g, " "));
+    updatePromptCount();
+  }
 };

@@ -126,6 +126,10 @@ select {
   padding-left: 1.6rem;
 }
 
+select option {
+  background-color: #22242d;
+}
+
 button:focus,
 input[type="text"]:focus,
 select:focus,
@@ -212,12 +216,14 @@ dialog::backdrop {
   display: none;
 }
 
+code[class*="language-"],
 pre[class*="language-"] {
   margin: 0;
   padding: 0;
   border: 0;
   box-shadow: none;
   background: transparent;
+  word-break: break-word !important;
 }
 
 @keyframes mulShdSpin {
@@ -313,23 +319,34 @@ pre[class*="language-"] {
 /*** Features ***/
 
 main {
+  position: relative;
   width: 100%;
   max-width: 160rem;
   margin: 0 auto;
   padding: 2rem;
+  margin-top: 5rem;
   background-color: rgba(0, 0, 0, 0.3);
   border-radius: 0.5rem;
+}
+
+main .logo {
+  position: absolute;
+  top: 3.2rem;
+  right: 2rem;
+  width: 15rem;
+  opacity: 0.9;
 }
 
 /* Database selector */
 
 .database-selector {
   margin-bottom: 2rem;
+  padding-right: 17rem;
 }
 
 .database-selector select {
   width: 100%;
-  max-width: 20rem;
+  max-width: 50rem;
 }
 
 /* Prompt input */
@@ -342,6 +359,10 @@ main {
   background-color: rgba(0, 0, 0, 0.1);
   border: 0.2rem solid rgba(0, 0, 0, 0.2);
   border-radius: 0.5rem;
+}
+
+.prompt-input:focus-within {
+  border-color: rgba(0, 128, 0, 0.5);
 }
 
 .prompt-input-text {
@@ -450,6 +471,10 @@ main {
 .prompt-output-cypher,
 .prompt-output-answer {
   font-family: monospace;
+}
+
+.prompt-output-cypher {
+  padding-bottom: 6rem;
 }
 
 /* Schema preview */

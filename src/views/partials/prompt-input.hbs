@@ -1,4 +1,14 @@
-<form class="prompt-input" id="promptInputForm">
+<form
+  class="prompt-input"
+  id="promptInputForm"
+  hx-indicator="#promptInputSubmit"
+  hx-post="/ask/"
+  hx-include="[name='database']"
+  hx-target="#promptOutput, #schema"
+  hx-trigger="submit"
+  hx-swap="outerHTML"
+  hx-on::after-request="handleAskAfterRequest()"
+>
   <div class="prompt-input-text">
     <input
       type="text"
@@ -11,19 +21,17 @@
     <div class="prompt-counter" id="promptCount">
       0/{{promptMaxlength}}
     </div>
-    <button class="prompt-reset" id="promptReset">
+    <button
+      class="prompt-reset"
+      id="promptReset"
+      type="button"
+      onclick="resetPrompt(this)"
+    >
       ×
     </button>
   </div>
   <div class="prompt-input-submit">
-    <button
-      hx-indicator="this"
-      hx-post="/ask/"
-      hx-include="[name='database']"
-      hx-target="#promptOutput, #schema"
-      hx-swap="outerHTML"
-      hx-on::after-request="handleAskAfterRequest()"
-    >
+    <button id="promptInputSubmit" type="submit">
       <span class="loader" id="promptInputLoadder"></span>
       <span>
         Ask!
