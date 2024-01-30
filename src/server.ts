@@ -77,7 +77,10 @@ async function startServer(fastify: FastifyInstance, opts: CustomOptions) {
       options: Object.assign({}, opts),
     });
 
-    await fastify.listen({ port: fastify.envConfig.PORT });
+    await fastify.listen({
+      host: fastify.envConfig.HOST,
+      port: fastify.envConfig.PORT,
+    });
   } catch (err) {
     fastify.log.error(err);
     process.exit(1);

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Clean the 'dist' directory
 rm -rf dist
