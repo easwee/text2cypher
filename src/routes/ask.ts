@@ -2,7 +2,6 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import S from "fluent-json-schema";
 import { Neo4jGraph } from "@langchain/community/graphs/neo4j_graph";
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
-import { DATABASES, neo4jFeedbackDriver } from "../service/neo4j";
 // this import should be replaced with langchain import when chypher validation is implemented there
 import { GraphCypherQAChain } from "../custom/graph-cypher-qa-chain/chain";
 
@@ -11,11 +10,6 @@ interface AskRequestBody {
   prompt: string;
   email?: string;
 }
-
-export const maxDuration = 30;
-
-const MAX_PROMPT_LENGTH = 300;
-const MAX_GRAPH_REQUEST_DURATION_MS = 5000;
 
 export default async function ask(fastify: FastifyInstance) {
   fastify.route({
@@ -36,7 +30,7 @@ export default async function ask(fastify: FastifyInstance) {
     reply: FastifyReply
   ): Promise<void> {
     const { database, prompt, email = "" } = req.body;
-    const promptMaxLength = parseInt(process.env.PROMPT_MAX_LENGTH as string);
+    const promptMaxLength = fastify.envConfig.PROMPT_MAX_LENGTH;
 
     fastify.log.info(
       `EMAIL: ${email} / DATABASE: ${database} / PROMPT: ${prompt}`
@@ -64,24 +58,26 @@ export default async function ask(fastify: FastifyInstance) {
     }
 
     let graph: Neo4jGraph;
-    const session = neo4jFeedbackDriver.session();
+    const session = fastify.neo4jDriver.session();
 
     try {
       // ask LLM
       const chatOpenAI = new ChatOpenAI({
-        openAIApiKey: process.env.OPENAI_API_KEY,
+        openAIApiKey: fastify.envConfig.OPENAI_API_KEY,
         modelName: "gpt-4-1106-preview",
         temperature: 0,
       });
 
-      const dbConnectionData = DATABASES.find((db) => db.name == database);
+      const dbConnectionData = fastify.envConfig.DATABASES.find(
+        (db) => db.name == database
+      );
 
       graph = await Neo4jGraph.initialize({
         url: dbConnectionData.uri,
         username: dbConnectionData.username,
         password: dbConnectionData.password,
         database: dbConnectionData.username,
-        timeoutMs: MAX_GRAPH_REQUEST_DURATION_MS,
+        timeoutMs: fastify.envConfig.PROMPT_MAX_DURATION_MS,
       });
 
       const chain = GraphCypherQAChain.fromLLM({

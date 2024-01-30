@@ -1,5 +1,4 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { DATABASES } from "../service/neo4j";
 
 export default async function home(fastify: FastifyInstance) {
   fastify.route({
@@ -15,11 +14,11 @@ export default async function home(fastify: FastifyInstance) {
     try {
       return reply.view("index.hbs", {
         layout: true,
-        databases: DATABASES.map((database) => database.name),
-        promptMaxlength: process.env.PROMPT_MAX_LENGTH,
+        databases: fastify.envConfig.DATABASES.map((database) => database.name),
+        promptMaxlength: fastify.envConfig.PROMPT_MAX_LENGTH,
       });
     } catch (error) {
-      fastify.log.error(`/ask/ Error: ${error}`);
+      fastify.log.error(`/home/ Error: ${error}`);
       reply.status(500).send({
         error: "Server error",
         message: "Server failed processing the request.",

@@ -8,30 +8,45 @@ import Sensible from "@fastify/sensible";
 import S from "fluent-json-schema";
 import { join } from "path";
 import { loadPartials } from "./utils/partials";
+import { initConfig, EnvConfig } from "./config";
+import { initFeedbackDatabase } from "./services/database";
+import { Driver } from "neo4j-driver";
+
+declare module "fastify" {
+  interface FastifyInstance {
+    envConfig: EnvConfig;
+    neo4jDriver: Driver;
+  }
+}
 
 interface CustomOptions {}
 
-const server = fastify({
-  logger: true,
-});
+async function initServer() {
+  const server = fastify({
+    logger: true,
+  });
+
+  await server.register(Env, {
+    dotenv: true,
+    data: process.env,
+    schema: S.object()
+      .prop("PORT", S.number().required())
+      .prop("OPENAI_API_KEY", S.string().required())
+      .prop("PROMPT_MAX_LENGTH", S.string().required())
+      .prop("DATABASES", S.string().required())
+      .prop("FEEDBACK_DATABASE", S.string().required())
+      .valueOf(),
+  });
+
+  server.decorate("envConfig", initConfig(process.env));
+  server.decorate("neo4jDriver", initFeedbackDatabase(server.envConfig));
+
+  return server;
+}
 
 async function startServer(fastify: FastifyInstance, opts: CustomOptions) {
   try {
-    // bring in ENV vars
-    await fastify.register(Env, {
-      dotenv: true,
-      data: process.env,
-      schema: S.object()
-        .prop("PORT", S.number().required())
-        .prop("OPENAI_API_KEY", S.string().required())
-        .prop("PROMPT_MAX_LENGTH", S.string().required())
-        .prop("DATABASES", S.string().required())
-        .prop("FEEDBACK_DATABASE_URI", S.string().required())
-        .prop("FEEDBACK_DATABASE_USERNAME", S.string().required())
-        .prop("FEEDBACK_DATABASE_PASSWORD", S.string().required())
-        .valueOf(),
-    });
-
+    // add static files for FE
     await fastify.register(FastifyStatic, {
       root: join(__dirname, "public"),
       prefix: "/public",
@@ -62,11 +77,14 @@ async function startServer(fastify: FastifyInstance, opts: CustomOptions) {
       options: Object.assign({}, opts),
     });
 
-    await fastify.listen({ port: parseInt(process.env.PORT) });
+    await fastify.listen({ port: fastify.envConfig.PORT });
   } catch (err) {
     fastify.log.error(err);
     process.exit(1);
   }
 }
 
-startServer(server, {});
+(async function () {
+  const server = await initServer();
+  startServer(server, {});
+})();

@@ -1,7 +1,5 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import S from "fluent-json-schema";
 import { Neo4jGraph } from "@langchain/community/graphs/neo4j_graph";
-import { DATABASES } from "../service/neo4j";
 
 interface StatusRequestBody {
   database: string;
@@ -27,7 +25,9 @@ export default async function schema(fastify: FastifyInstance) {
         throw new Error("Payload error: Missing /schema/ parameter 'database'");
       }
 
-      const dbConnectionData = DATABASES.find((db) => db.name == database);
+      const dbConnectionData = fastify.envConfig.DATABASES.find(
+        (db) => db.name == database
+      );
 
       graph = await Neo4jGraph.initialize({
         url: dbConnectionData.uri,

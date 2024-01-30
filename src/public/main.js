@@ -43,28 +43,36 @@ function clearLastPrompts() {
 
 function renderLastPrompts(prompts) {
   const lastPromptsEl = document.getElementById("lastPrompts");
-  lastPromptsEl.innerHTML = "";
-  prompts.forEach(({ prompt, cypher }) => {
-    const promptEl = document.createElement("div");
+  const lastPromptsListEl = document.getElementById("lastPromptsList");
 
-    promptEl.setAttribute("DATA-prompt", prompt);
-    promptEl.classList.add("last-prompts-item");
-    promptEl.addEventListener("click", handleLastPromptClick);
+  lastPromptsListEl.innerHTML = "";
 
-    const promptElText = document.createElement("div");
-    promptElText.classList.add("last-prompts-item-text");
-    promptElText.title = prompt;
-    promptElText.innerHTML = `${prompt}`;
-    promptEl.append(promptElText);
+  if (prompts) {
+    lastPromptsEl.style.display = "block";
+    prompts.forEach(({ prompt, cypher }) => {
+      const promptEl = document.createElement("div");
 
-    const promptElCypher = document.createElement("div");
-    promptElCypher.classList.add("last-prompts-item-cypher");
-    promptElCypher.title = cypher;
-    promptElCypher.innerHTML = cypher;
-    promptEl.append(promptElCypher);
+      promptEl.setAttribute("DATA-prompt", prompt);
+      promptEl.classList.add("last-prompts-item");
+      promptEl.addEventListener("click", handleLastPromptClick);
 
-    lastPromptsEl.append(promptEl);
-  });
+      const promptElText = document.createElement("div");
+      promptElText.classList.add("last-prompts-item-text");
+      promptElText.title = prompt;
+      promptElText.innerHTML = `${prompt}`;
+      promptEl.append(promptElText);
+
+      const promptElCypher = document.createElement("div");
+      promptElCypher.classList.add("last-prompts-item-cypher");
+      promptElCypher.title = cypher;
+      promptElCypher.innerHTML = cypher;
+      promptEl.append(promptElCypher);
+
+      lastPromptsListEl.append(promptEl);
+    });
+  } else {
+    lastPromptsEl.style.display = "none";
+  }
 }
 
 function getQueryParam(name) {

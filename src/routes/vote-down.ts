@@ -1,5 +1,4 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { neo4jFeedbackDriver } from "../service/neo4j";
 
 interface VoteRequestBody {
   messageId: string;
@@ -26,7 +25,7 @@ export default async function voteDown(fastify: FastifyInstance) {
       });
     }
 
-    const session = neo4jFeedbackDriver.session();
+    const session = fastify.neo4jDriver.session();
 
     try {
       // store vote

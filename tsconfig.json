@@ -19,7 +19,8 @@
     "experimentalDecorators": true,
     "sourceMap": true,
     "types": ["web-streams-polyfill"],
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "declaration": true
   },
   "include": ["src/**/*.ts", "src/public/main.js"],
   "exclude": ["node_modules"],

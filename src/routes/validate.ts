@@ -1,6 +1,4 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import S from "fluent-json-schema";
-import { neo4jFeedbackDriver } from "../service/neo4j";
 
 interface ValidateRequestBody {
   messageId: string;
@@ -12,19 +10,6 @@ export default async function validate(fastify: FastifyInstance) {
     method: "POST",
     url: "/validate/",
     handler: onValidate,
-    schema: {
-      response: {
-        200: S.object().prop("message", S.string()).valueOf(),
-        400: S.object()
-          .prop("error", S.string().required())
-          .prop("message", S.string().required())
-          .valueOf(),
-        500: S.object()
-          .prop("error", S.string())
-          .prop("message", S.string().required())
-          .valueOf(),
-      },
-    },
   });
 
   async function onValidate(
@@ -47,7 +32,7 @@ export default async function validate(fastify: FastifyInstance) {
       });
     }
 
-    const session = neo4jFeedbackDriver.session();
+    const session = fastify.neo4jDriver.session();
 
     try {
       // store feedback cypher
