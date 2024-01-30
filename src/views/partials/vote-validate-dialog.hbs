@@ -1,0 +1,29 @@
+<dialog class="validate-cypher" id="validateCypher">
+  <header>
+    <h3>Please correct the Cypher query</h3>
+    <form method="dialog">
+      <button class="close">×</button>
+    </form>
+  </header>
+  <form>
+    <textarea
+      name="validatedCypher"
+      oninput="handleCypherEdit()"
+    >{{cypher}}</textarea>
+    <footer>
+      <button
+        class="validate-cypher-submit"
+        id="cypherEditSubmit"
+        hx-target="this"
+        hx-indicator="this"
+        hx-include="[name='messageId']"
+        hx-post="/validate/"
+      >
+        <span class="loader" id="promptInputLoadder"></span>
+        <span>
+          Submit
+        </span>
+      </button>
+    </footer>
+  </form>
+</dialog>

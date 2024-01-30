@@ -166,6 +166,7 @@ dialog button.close {
   justify-content: center;
   width: 4rem;
   height: 4rem;
+  font-size: 1.8rem;
   border-radius: 50%;
 }
 
@@ -179,6 +180,7 @@ dialog footer {
 dialog::backdrop {
   background-color: rgba(0, 0, 0, 0.7);
   transition: all 5s ease;
+  backdrop-filter: blur(10px);
 }
 
 .loader {
@@ -445,13 +447,8 @@ main {
   font-size: 1.4rem;
 }
 
-.prompt-output-cypher {
-  white-space: pre-wrap;
-  font-family: monospace;
-}
-
+.prompt-output-cypher,
 .prompt-output-answer {
-  white-space: pre-wrap;
   font-family: monospace;
 }
 
@@ -473,6 +470,7 @@ main {
   white-space: pre-wrap;
   font-family: monospace;
   font-size: 1.4rem;
+  line-height: 1.6;
 }
 
 .schema .loader {
@@ -570,4 +568,18 @@ main {
 
 .vote-down {
   color: red;
+}
+
+.vote-validate-success {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.vote-validate-success button {
+  margin-left: 2rem;
+}
+
+.validate-cypher-submit {
+  background: green;
 }

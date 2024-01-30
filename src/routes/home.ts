@@ -19,10 +19,10 @@ export default async function home(fastify: FastifyInstance) {
         promptMaxlength: process.env.PROMPT_MAX_LENGTH,
       });
     } catch (error) {
-      fastify.log.error(error);
-      return reply.view("partials/notification.hbs", {
-        type: "error",
-        text: "Server error",
+      fastify.log.error(`/ask/ Error: ${error}`);
+      reply.status(500).send({
+        error: "Server error",
+        message: "Server failed processing the request.",
       });
     }
   }

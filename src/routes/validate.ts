@@ -13,10 +13,6 @@ export default async function validate(fastify: FastifyInstance) {
     url: "/validate/",
     handler: onValidate,
     schema: {
-      body: S.object()
-        .prop("messageId", S.string().required())
-        .prop("validatedCypher", S.string())
-        .valueOf(),
       response: {
         200: S.object().prop("message", S.string()).valueOf(),
         400: S.object()
@@ -67,10 +63,7 @@ export default async function validate(fastify: FastifyInstance) {
         }
       );
 
-      reply
-        .header("Content-Type", "application/json; charset=utf-8")
-        .status(200)
-        .send({ message: "OK" });
+      return reply.view("partials/vote-validate-success.hbs");
     } catch (error) {
       fastify.log.error(`/validate/ Error: ${error}`);
       reply.status(500).send({

@@ -28,11 +28,10 @@ export default async function status(fastify: FastifyInstance) {
         text: "Server operational.",
       });
     } catch (error) {
-      fastify.log.error(error);
-      return reply.view("partials/notification.hbs", {
-        layout: false,
-        type: "error",
-        text: "Server dead.",
+      fastify.log.error(`/ask/ Error: ${error}`);
+      reply.status(500).send({
+        error: "Server error",
+        message: "Server failed processing the request.",
       });
     }
   }

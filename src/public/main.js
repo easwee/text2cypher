@@ -1,17 +1,3 @@
-function handleLastPromptClick(event) {
-  setNewPrompt(event);
-  updatePromptCount();
-}
-
-function handleAskAfterRequest() {
-  const cypher = document.getElementById("cypher");
-
-  Prism.highlightAll(cypher);
-
-  updateLastPrompts();
-  initDownvoteDialog();
-}
-
 function updatePromptCount(promptMaxlength = 300) {
   const input = document.getElementById("promptInput");
   const promptCount = document.getElementById("promptCount");
@@ -77,12 +63,32 @@ function renderLastPrompts(prompts) {
 }
 
 function initDownvoteDialog() {
-  const voteDownDialog = document.querySelector("#voteDownDialog");
-  const showVoteDownDialog = document.querySelector("#voteDown");
+  const validateCypher = document.querySelector("#validateCypher");
+  const showvalidateCypher = document.querySelector("#voteDown");
 
-  showVoteDownDialog.addEventListener("click", () => {
-    voteDownDialog.showModal();
+  showvalidateCypher.addEventListener("click", () => {
+    validateCypher.showModal();
   });
+}
+
+function handleLastPromptClick(event) {
+  setNewPrompt(event);
+  updatePromptCount();
+}
+
+function handleAskAfterRequest() {
+  const cypher = document.getElementById("cypher");
+  const answer = document.getElementById("answer");
+
+  Prism.highlightAll(cypher);
+  Prism.highlightAll(answer);
+
+  updateLastPrompts();
+  initDownvoteDialog();
+}
+
+function handleCypherEdit(event) {
+  const cypher = document.getElementById("cypherEditSubmit");
 }
 
 window.onload = () => {
