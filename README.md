@@ -12,7 +12,7 @@ Setup env:
 
 `cp .env.template .env`
 
-and add required keys.
+and add required keys. Check `.env.example` for setup. Multiple input `DATABASES` are supported.
 
 Install required dependencies:
 
