@@ -345,9 +345,12 @@ main .logo {
   padding-right: 17rem;
 }
 
+.database-selector form {
+  max-width: calc(100%);
+}
+
 .database-selector select {
   width: 100%;
-  max-width: 50rem;
 }
 
 /* Prompt input */
