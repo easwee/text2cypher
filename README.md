@@ -4,7 +4,7 @@ Crowdsourced cypher statement evaluation.
 
 ## .env vars
 
-Check .env.example for overview on how to setup .env vars.
+Check `.env.example` for overview on how to setup `.env` vars.
 
 | Parameter                | Description                                                                                                                                                                                     |
 | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -42,11 +42,11 @@ Setup env:
 
 `cp .env.template .env` and add missing keys.
 
-Docker compose will read env variables from your .env file.
+Docker compose will read env variables from your `.env` file.
 
 `docker-compose up --build`
 
-Docker container will spin up on 127.0.0.1:3001
+Docker container will spin up on `127.0.0.1:3001`
 
 ## Development
 
