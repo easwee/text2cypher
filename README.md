@@ -2,6 +2,8 @@
 
 Crowdsourced cypher statement evaluation.
 
+![text2cypher prompt example](_assets/preview.webp)
+
 ## .env vars
 
 Check `.env.example` for overview on how to setup `.env` vars.
