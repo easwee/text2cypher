@@ -64,4 +64,4 @@ Run local development server:
 
 `npm run dev`
 
-This project is built with [Fastify](https://www.fastify.io/docs/latest/) and [HTMX](https://htmx.org/).
+This project is built with [Fastify](https://www.fastify.io/docs/latest/), [Langchain](https://js.langchain.com/docs/get_started/introduction) and [HTMX](https://htmx.org/).
