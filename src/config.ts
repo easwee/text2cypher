@@ -18,7 +18,7 @@ export interface EnvConfig {
 export function initConfig(env: any): EnvConfig {
   return {
     HOST: env.HOST ? env.HOST : "127.0.0.1",
-    PORT: env.PORT ? parseInt(env.PORT) : 9001,
+    PORT: env.PORT ? parseInt(env.PORT) : 3001,
     OPENAI_API_KEY: env.OPENAI_API_KEY || "",
     PROMPT_MAX_LENGTH: env.PROMPT_MAX_LENGTH
       ? parseInt(env.PROMPT_MAX_LENGTH)

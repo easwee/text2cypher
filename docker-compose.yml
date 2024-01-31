@@ -3,8 +3,8 @@ services:
   app:
     build: .
     ports:
-      - "${PORT}:${PORT}"
+      - "${DOCKER_COMPOSE_HOST}:${DOCKER_COMPOSE_PORT}:${PORT}"
     env_file:
       - .env
     environment:
-      HOST: 0.0.0.0
+      HOST: 0.0.0.0 # binds to docker internal app host
