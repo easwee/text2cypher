@@ -1,6 +1,6 @@
 # text2cypher
 
-Try out how well [text-to-cypher](https://python.langchain.com/docs/use_cases/graph/graph_cypher_qa) approach works on your own Neo4j databases.
+Application to evaluate how well [text-to-cypher](https://python.langchain.com/docs/use_cases/graph/graph_cypher_qa) approach works on your own Neo4j databases.
 
 ![text2cypher prompt example](_assets/preview.webp)
 
