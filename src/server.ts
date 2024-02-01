@@ -30,16 +30,20 @@ async function initServer() {
     dotenv: true,
     data: process.env,
     schema: S.object()
-      .prop("PORT", S.number().required())
       .prop("OPENAI_API_KEY", S.string().required())
-      .prop("PROMPT_MAX_LENGTH", S.string().required())
       .prop("DATABASES", S.string().required())
-      .prop("FEEDBACK_DATABASE", S.string().required())
+      .prop("FEEDBACK_DATABASE", S.string())
+      .prop("PROMPT_MAX_LENGTH", S.string())
+      .prop("PROMPT_MAX_DURATION_MS", S.string())      
+      .prop("PORT", S.string())
+      .prop("HOST", S.string())
       .valueOf(),
   });
 
   server.decorate("envConfig", initConfig(process.env));
-  server.decorate("neo4jDriver", initFeedbackDatabase(server.envConfig));
+  if(server.envConfig.FEEDBACK_DATABASE) {
+    server.decorate("neo4jDriver", initFeedbackDatabase(server.envConfig));
+  }
 
   return server;
 }

@@ -1,3 +1,4 @@
+import S from "fluent-json-schema";
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { Neo4jGraph } from "@langchain/community/graphs/neo4j_graph";
 
@@ -10,6 +11,11 @@ export default async function schema(fastify: FastifyInstance) {
     method: "POST",
     url: "/schema/",
     handler: onStatus,
+    schema: {
+      body: S.object()
+        .prop("database", S.string().required())
+        .valueOf(),
+    },
   });
 
   async function onStatus(
@@ -43,8 +49,9 @@ export default async function schema(fastify: FastifyInstance) {
       });
     } catch (error) {
       fastify.log.error(`/schema/ Error: ${error}`);
-      return reply.view("partials/schema.hbs", {
-        schema: JSON.stringify(error),
+      reply.status(500).send({
+        error: "Server error",
+        message: "Server failed processing the request.",
       });
     } finally {
       if (graph) {

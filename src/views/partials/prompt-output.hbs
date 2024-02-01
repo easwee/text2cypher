@@ -4,7 +4,9 @@
     <div class="prompt-output-column-scroll prompt-output-cypher">
       <pre><code class="language-cypher" id="cypher" data-cypher="{{cypher}}">{{cypher}}</code></pre>
     </div>
-    {{> vote cypher=cypher }}
+    {{#if feedbackEnabled}}
+      {{> vote cypher=cypher }}
+    {{/if}}
   </div>
   <div class="prompt-output-column">
     <div class="prompt-output-column-scroll prompt-output-answer">

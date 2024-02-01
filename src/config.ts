@@ -25,7 +25,7 @@ export function initConfig(env: any): EnvConfig {
       : 300,
     PROMPT_MAX_DURATION_MS: env.PROMPT_MAX_DURATION_MS
       ? parseInt(env.PROMPT_MAX_DURATION_MS)
-      : 5000,
+      : 10000,
     DATABASES: env.DATABASES ? JSON.parse(env.DATABASES) : [],
     FEEDBACK_DATABASE: env.FEEDBACK_DATABASE
       ? JSON.parse(env.FEEDBACK_DATABASE)

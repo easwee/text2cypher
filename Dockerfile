@@ -18,7 +18,7 @@ COPY tsconfig.json .
 RUN npm run build
 
 # Expose the port the app runs on
-EXPOSE 9001
+EXPOSE 3001
 
 # Command to run the app
 

@@ -1,3 +1,4 @@
+import S from "fluent-json-schema";
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 
 interface ValidateRequestBody {
@@ -10,6 +11,12 @@ export default async function validate(fastify: FastifyInstance) {
     method: "POST",
     url: "/validate/",
     handler: onValidate,
+    schema: {
+      body: S.object()
+        .prop("messageId", S.string().required())
+        .prop("validatedCypher", S.string())
+        .valueOf(),
+    },
   });
 
   async function onValidate(
@@ -56,7 +63,9 @@ export default async function validate(fastify: FastifyInstance) {
         message: "Server failed processing the request.",
       });
     } finally {
-      session.close();
+      if (session) {
+        session.close();
+      }
     }
   }
 }

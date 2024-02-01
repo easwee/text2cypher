@@ -1,8 +1,8 @@
+import S from "fluent-json-schema";
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 
-interface VoteRequestBody {
+interface VoteUpRequestBody {
   messageId: string;
-  validatedCypher?: string;
 }
 
 export default async function voteUp(fastify: FastifyInstance) {
@@ -10,10 +10,15 @@ export default async function voteUp(fastify: FastifyInstance) {
     method: "POST",
     url: "/vote/up/",
     handler: onVoteUp,
+    schema: {
+      body: S.object()
+        .prop("messageId", S.string().required())
+        .valueOf(),
+    },
   });
 
   async function onVoteUp(
-    req: FastifyRequest<{ Body: VoteRequestBody }>,
+    req: FastifyRequest<{ Body: VoteUpRequestBody }>,
     reply: FastifyReply
   ): Promise<any> {
     const { messageId } = req.body;
@@ -49,7 +54,9 @@ export default async function voteUp(fastify: FastifyInstance) {
         message: "Server failed processing the request.",
       });
     } finally {
-      session.close();
+      if (session) {
+        session.close();
+      }
     }
   }
 }
