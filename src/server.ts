@@ -30,8 +30,8 @@ async function initServer() {
     dotenv: true,
     data: process.env,
     schema: S.object()
-      .prop("OPENAI_API_KEY", S.string().required())
-      .prop("DATABASES", S.string().required())
+      .prop("OPENAI_API_KEY", S.string())
+      .prop("DATABASES", S.string())
       .prop("FEEDBACK_DATABASE", S.string())
       .prop("PROMPT_MAX_LENGTH", S.string())
       .prop("PROMPT_MAX_DURATION_MS", S.string())      
