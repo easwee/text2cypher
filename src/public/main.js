@@ -52,7 +52,7 @@ function renderLastPrompts(prompts) {
     prompts.forEach(({ prompt, cypher }) => {
       const promptEl = document.createElement("div");
 
-      promptEl.setAttribute("DATA-prompt", prompt);
+      promptEl.setAttribute("data-prompt", prompt);
       promptEl.classList.add("last-prompts-item");
       promptEl.addEventListener("click", handleLastPromptClick);
 
@@ -75,6 +75,21 @@ function renderLastPrompts(prompts) {
   }
 }
 
+function renderClientDatabases(clientDatabases) {
+    debugger;
+    if(clientDatabases) {
+        const databaseSelect = document.querySelector('select[name="database"]');
+        databaseSelect.innerHTML = '';
+
+        clientDatabases.forEach(({name}) => {
+            const option = document.createElement('option');
+            option.value = name;
+            option.text = name;    
+            databaseSelect.appendChild(option);
+        })
+    }
+}
+
 function getQueryParam(name) {
   const urlParams = new URLSearchParams(window.location.search);
   return urlParams.get(name);
@@ -82,16 +97,107 @@ function getQueryParam(name) {
 
 function initDownvoteDialog() {
   const validateCypher = document.querySelector("#validateCypher");
-  const showvalidateCypher = document.querySelector("#voteDown");
+  const voteDown = document.querySelector("#voteDown");
 
-  showvalidateCypher.addEventListener("click", () => {
-    validateCypher.showModal();
+  if(voteDown) {
+    voteDown.addEventListener("click", () => {
+      validateCypher.showModal();
+    });
+  }
+}
+
+function initSettingsDialog() {
+  const settingsTrigger = document.querySelector("#settingsTrigger");
+  const settingsDialog = document.querySelector("#settings");
+
+  settingsTrigger.addEventListener("click", () => {
+    settingsDialog.showModal();
+  });
+
+  // handle settings UI
+//   const customDatabasesContainer = document.getElementById('customDatabasesContainer');
+//   const addBtn = document.getElementById('addCustomDatabase');
+
+//   const updateCloneAttributes = (clone, newIndex) => {
+//     clone.id = `customDatabase_${newIndex}`;
+//     clone.querySelector('h4').innerHTML = `Database connection <span class="settings-custom-database-remove">- remove</span>`;
+   
+//     let fields = clone.querySelectorAll('input');
+//     fields.forEach(field => {
+//         let newInputName = field.name.split('_')[0] + '_' + field.name.split('_')[1];         
+//         field.name = `${newInputName}_${newIndex}_${field.name.split('_')[3]}`;
+//         field.value = '';
+//     });
+//   };
+
+//   addBtn.addEventListener('click', function() {
+//     const lastFieldset = customDatabasesContainer.querySelector('fieldset:last-of-type');
+//     const newIndex = lastFieldset ? parseInt(lastFieldset.id.split('_')[1]) + 1 : 0;
+//     const clone = lastFieldset.cloneNode(true);
+//     updateCloneAttributes(clone, newIndex);
+//     customDatabasesContainer.appendChild(clone);
+//   });
+  
+//   customDatabasesContainer.addEventListener('click', function(e) {
+//     if(e.target.classList.contains('settings-custom-database-remove')) {
+//         e.target.closest('fieldset').remove();
+//     }
+//   });
+
+  // handle settings save
+  const settingsSave = document.getElementById("settingsSave")
+  settingsSave.addEventListener("click", function(e) {
+    e.preventDefault();
+    
+    const openAIApiKey = document.querySelector('input[name="openai_api_key"]').value;
+    localStorage.setItem('openAIApiKey', openAIApiKey);
+    
+    // const databases = [];
+
+    // const fieldsets = document.querySelectorAll('.settings-custom-database');
+    // const databaseSelect = document.querySelector('select[name="database"]');
+
+    // databaseSelect.innerHTML = '';
+    
+    // fieldsets.forEach(function(fieldset) {
+    //     const dbInfo = {
+    //         name: fieldset.querySelector('input[name*="name"]').value,
+    //         uri: fieldset.querySelector('input[name*="uri"]').value,
+    //         username: fieldset.querySelector('input[name*="username"]').value,
+    //         password: fieldset.querySelector('input[name*="password"]').value
+    //     };
+
+    //     const option = document.createElement('option');
+    //     option.value = dbInfo.name;
+    //     option.text = dbInfo.name;
+
+    //     databaseSelect.appendChild(option);
+    //     databases.push(dbInfo);
+    // });
+    
+    // // Save the databases array to localStorage as a JSON string
+    // localStorage.setItem('databases', JSON.stringify(databases));
+
+    settingsDialog.close();
   });
 }
 
 function handleLastPromptClick(event) {
   setNewPrompt(event);
   updatePromptCount();
+}
+
+function handleAskBeforeRequest(event) {
+    const openAIApiKey = localStorage.getItem("openAIApiKey")
+    const databases = localStorage.getItem("databases")
+    
+    if(openAIApiKey) {
+        event.detail.requestConfig.parameters["openAIApiKey"] = openAIApiKey;
+    }
+
+    if(databases) {
+        event.detail.requestConfig.parameters["databases"] = databases;
+    }
 }
 
 function handleAskAfterRequest() {
@@ -105,14 +211,13 @@ function handleAskAfterRequest() {
   initDownvoteDialog();
 }
 
-function handleCypherEdit(event) {
-  const cypher = document.getElementById("cypherEditSubmit");
-}
 
 window.onload = () => {
   const lastPrompts = JSON.parse(localStorage.getItem("last_prompts"));
+  // const clientDatabases = JSON.parse(localStorage.getItem("databases"));
 
   renderLastPrompts(lastPrompts);
+  // renderClientDatabases(clientDatabases);
 
   // fill prompt from url if present
   const promptInput = document.getElementById("promptInput");
@@ -122,4 +227,6 @@ window.onload = () => {
     promptInput.value = decodeURIComponent(promptValue.replace(/\+/g, " "));
     updatePromptCount();
   }
+
+  initSettingsDialog();
 };

@@ -164,6 +164,13 @@ textarea:focus {
   font-style: italic;
 }
 
+fieldset {
+  margin: 2rem 0;
+  padding: 0;
+  border: 0;
+  border-top: 0.2rem solid rgba(0, 0, 0, 0.2);
+}
+
 /* Dialog */
 
 dialog {
@@ -388,8 +395,9 @@ main .logo {
 /* Database selector */
 
 .database-selector {
+  position: relative;
   margin-bottom: 2rem;
-  padding-right: 17rem;
+  padding-right: 22rem;
 }
 
 .database-selector form {
@@ -399,6 +407,75 @@ main .logo {
 .database-selector select {
   width: 100%;
 }
+
+.settings {
+  position: absolute;
+  top: 0;
+  right: 17rem;
+}
+
+.settings-icon {
+  width: 4rem;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  fill: rgba(255, 255, 255, 0.5);
+}
+
+.settings-icon:hover {
+  fill: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+}
+
+.settings p {
+  font-size: 1.3rem;
+  margin: 2rem 0;
+}
+
+.settings h4 {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin: 2rem 0;
+}
+
+.settings .field {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.settings .field label {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.settings .field input { 
+  width: 80%;
+  margin-left: 2rem;
+}
+
+.settings-custom-database-add,
+.settings-custom-database-remove {
+  font-size: 1.2rem;
+  font-weight: normal;
+  color: green;
+  cursor: pointer;
+}
+
+.settings-custom-database-add {
+  padding-top: 2rem;
+  border-top: 0.2rem solid rgba(0, 0, 0, 0.2);
+}
+
+.settings fieldset:first-child .settings-custom-database-remove  {
+  display: none;
+}
+
 
 /* Prompt input */
 

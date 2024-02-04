@@ -9,6 +9,8 @@ import { Session } from "neo4j-driver";
 interface AskRequestBody {
   database: string;
   prompt: string;
+  openAIApiKey?: string;
+  clientDatabases?: string;
 }
 
 export default async function ask(fastify: FastifyInstance) {
@@ -20,6 +22,7 @@ export default async function ask(fastify: FastifyInstance) {
       body: S.object()
         .prop("database", S.string().required())
         .prop("prompt", S.string().required())
+        .prop("openaiApiKey", S.string())
         .valueOf(),
     },
   });
@@ -28,7 +31,7 @@ export default async function ask(fastify: FastifyInstance) {
     req: FastifyRequest<{ Body: AskRequestBody }>,
     reply: FastifyReply
   ): Promise<void> {
-    const { database, prompt } = req.body;
+    const { database, prompt, openAIApiKey } = req.body;
     const promptMaxLength = fastify.envConfig.PROMPT_MAX_LENGTH;
 
     fastify.log.info(
@@ -60,9 +63,11 @@ export default async function ask(fastify: FastifyInstance) {
     let session: Session;
 
     try {
+
       // ask LLM
+      const apiKey = openAIApiKey ? openAIApiKey : fastify.envConfig.OPENAI_API_KEY
       const chatOpenAI = new ChatOpenAI({
-        openAIApiKey: fastify.envConfig.OPENAI_API_KEY,
+        openAIApiKey: apiKey,
         modelName: "gpt-4-1106-preview",
         temperature: 0,
       });
@@ -109,7 +114,7 @@ export default async function ask(fastify: FastifyInstance) {
       if (answer) {
         const embeddings = new OpenAIEmbeddings();
         const question_embedding = await embeddings.embedQuery(prompt);
-        fastify.log.info(">>>>>>>>>>>>>>>>>>>>>", feedbackEnabled, fastify.envConfig.FEEDBACK_DATABASE)
+        
         if(feedbackEnabled) {
           session = fastify.neo4jDriver.session();
           const storedMessageResult = await session.run(
@@ -147,7 +152,7 @@ export default async function ask(fastify: FastifyInstance) {
       fastify.log.error(`/ask/ Error: ${error}`);
       reply.status(500).send({
         error: "Server error",
-        message: "Server failed processing the request.",
+        message: `Server failed processing the request. Error was: ${JSON.stringify(error)}`,
       });
     } finally {
       if (session) {

@@ -2,9 +2,13 @@
 
 Application to evaluate how well [text-to-cypher](https://python.langchain.com/docs/use_cases/graph/graph_cypher_qa) approach works on your own Neo4j databases.
 
+Features:
+- Multiple input databases 
+- Collect user feedback on generated cypher queries
+- Client-side OpenAI API key override
+
 ![text2cypher prompt example](_assets/preview.webp)
 
-Bind a feedback database to collect generated cypher feedback.
 
 ## Run with Docker
 
