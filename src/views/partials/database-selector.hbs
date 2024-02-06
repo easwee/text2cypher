@@ -4,14 +4,17 @@
       title="Selected database"
       name="database"
       hx-post="/schema/"
-      hx-trigger="change"
+      hx-trigger="change, load delay:1s"
       hx-target="#schema, #promptOutput"
+      hx-swap="outerHTML"
       hx-indicator="main"
+
     >
       {{#each databases}}
         <option>{{this}}</option>
       {{/each}}
     </select>
+    <input type="hidden" name="clientDatabases" />
   </form>
   {{>settings}}
 </div>

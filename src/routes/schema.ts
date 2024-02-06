@@ -1,9 +1,11 @@
 import S from "fluent-json-schema";
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { Neo4jGraph } from "@langchain/community/graphs/neo4j_graph";
+import { parseClientDatabases } from "../utils/database";
 
 interface StatusRequestBody {
   database: string;
+  clientDatabases?: string;
 }
 
 export default async function schema(fastify: FastifyInstance) {
@@ -25,13 +27,17 @@ export default async function schema(fastify: FastifyInstance) {
     let graph: Neo4jGraph;
 
     try {
-      const { database } = req.body;
+      const { database, clientDatabases } = req.body;
 
       if (!database) {
         throw new Error("Payload error: Missing /schema/ parameter 'database'");
       }
 
-      const dbConnectionData = fastify.envConfig.DATABASES.find(
+      const allDatabases = [
+        ...fastify.envConfig.DATABASES, 
+        ...parseClientDatabases(clientDatabases)
+      ];
+      const dbConnectionData = allDatabases.find(
         (db) => db.name == database
       );
 

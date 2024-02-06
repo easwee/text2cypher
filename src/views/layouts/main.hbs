@@ -7,11 +7,11 @@
     <link rel="icon" type="image/x-icon" href="/public/favicon.ico">
     <link href="/public/prism.css" rel="stylesheet" />
     <link href="/public/main.css" rel="stylesheet" />
-    <script src="/public/htmx.min.js"></script>
     <script src="/public/main.js"></script>
+    <script src="/public/htmx.min.js"></script>
   </head>
   <body>
-    <main hx-trigger="load" hx-post="/schema/" hx-target="#schema" hx-swap="outerHTML" hx-include="[name='database']">
+    <main hx-on:htmx:beforeProcessNode="init()">
       <img src="/public/logo.svg" alt="Text2Cypher" class="logo" />
       <div class="loading-overlay">
         <span class="loader"></span>
@@ -23,6 +23,11 @@
 
 {{#if layout}}
     </main>
+    <script>
+  document.addEventListener('DOMContentLoaded', (event) => {
+    init();
+  });
+</script>
     <script>
       window.Prism = window.Prism || {};
       window.Prism.manual = true;

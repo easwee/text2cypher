@@ -12,44 +12,20 @@
             </form>
         </header>        
         <p>
-            This settings override server config. Settings are saved to your local storage and are not saved on server. 
+            This settings override server config. Settings are saved to your local storage and are not saved on server.
+            <br />
+            Use this for demo porpuses only. Delete data afterwards.
         </p>
-        <br />
-            <div class="field">
-                <label for="openai_api_key">OpenAI API key
-                    <input type="text" name="openai_api_key" />
-                </label>
-            </div>
-            {{!-- <div id="customDatabasesContainer">
-            <fieldset class="settings-custom-database" id="customDatabase_0">
-                <h4>Database connection <span class="settings-custom-database-remove">- remove</span></h4>
+        <form>
+            <fieldset>
                 <div class="field">
-                    <label>
-                        Name
-                        <input name="custom_database_1_name" type="text" />
-                    </label>
-                </div>
-                <div class="field">
-                    <label>
-                        URI
-                        <input name="custom_database_1_uri" type="text" />
-                    </label>
-                </div>
-                <div class="field">
-                    <label>
-                        Username
-                        <input name="custom_database_1_username" type="text" />
-                    </label>
-                </div>
-                 <div class="field">
-                    <label>
-                        Password
-                        <input name="custom_database_1_password" type="text" />
+                    <label for="openai_api_key">OpenAI API key
+                        <input type="text" name="openai_api_key" />
                     </label>
                 </div>
             </fieldset>
-            </div>
-            <div class="settings-custom-database-add" id="addCustomDatabase">+ add database connection</div> --}}
+            <div id="databasesContainer"></div>
+            <div class="settings-custom-database-add" id="addCustomDatabase">+ add database connection</div>
             <footer>
                 <button
                     class="validate-cypher-submit"
@@ -60,6 +36,6 @@
                     </span>
                 </button>
             </footer>
-
+        </form>
     </dialog>
 </div>

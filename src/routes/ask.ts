@@ -5,6 +5,7 @@ import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
 // this import should be replaced with langchain import when chypher validation is implemented there
 import { GraphCypherQAChain } from "../custom/graph-cypher-qa-chain/chain";
 import { Session } from "neo4j-driver";
+import { parseClientDatabases } from "../utils/database";
 
 interface AskRequestBody {
   database: string;
@@ -31,7 +32,7 @@ export default async function ask(fastify: FastifyInstance) {
     req: FastifyRequest<{ Body: AskRequestBody }>,
     reply: FastifyReply
   ): Promise<void> {
-    const { database, prompt, openAIApiKey } = req.body;
+    const { database, prompt, openAIApiKey, clientDatabases = '[]' } = req.body;
     const promptMaxLength = fastify.envConfig.PROMPT_MAX_LENGTH;
 
     fastify.log.info(
@@ -72,7 +73,11 @@ export default async function ask(fastify: FastifyInstance) {
         temperature: 0,
       });
 
-      const dbConnectionData = fastify.envConfig.DATABASES.find(
+      const allDatabases = [
+        ...fastify.envConfig.DATABASES, 
+        ...parseClientDatabases(clientDatabases)
+      ];
+      const dbConnectionData = allDatabases.find(
         (db) => db.name == database
       );
 
@@ -112,7 +117,7 @@ export default async function ask(fastify: FastifyInstance) {
       let messageId = "";
 
       if (answer) {
-        const embeddings = new OpenAIEmbeddings();
+        const embeddings = new OpenAIEmbeddings({ openAIApiKey: apiKey });
         const question_embedding = await embeddings.embedQuery(prompt);
         
         if(feedbackEnabled) {

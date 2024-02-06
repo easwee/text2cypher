@@ -76,7 +76,6 @@ function renderLastPrompts(prompts) {
 }
 
 function renderClientDatabases(clientDatabases) {
-    debugger;
     if(clientDatabases) {
         const databaseSelect = document.querySelector('select[name="database"]');
         databaseSelect.innerHTML = '';
@@ -106,85 +105,149 @@ function initDownvoteDialog() {
   }
 }
 
-function initSettingsDialog() {
-  
+function initSettingsDialog() {  
   const settingsTrigger = document.querySelector("#settingsTrigger");
   const settingsDialog = document.querySelector("#settings");
-  
+  const databasesContainer = document.getElementById('databasesContainer');
+  const databaseSelect = document.querySelector('select[name="database"]');
+
+  // populate database selection with custom databases from local storage
+  const databases = localStorage.getItem("databases");
+  const databaseFieldsets = databases.length > 0 ? JSON.parse(databases) : []
+  databaseFieldsets.forEach((data, index) => {   
+    const option = document.createElement('option');
+    option.value = data.name;
+    option.text = data.name;
+    databaseSelect.appendChild(option);
+  })
+
+  const clientDatabasesInput = document.querySelector("input[name='clientDatabases']")
+  clientDatabasesInput.value = databases;
+
   settingsTrigger.addEventListener("click", () => {
+    // populate settings UI from local storage
+    const openAIApiKey = localStorage.getItem("openAIApiKey");
+    const openAIApiKeyInput = document.querySelector("[name='openai_api_key']")
+    openAIApiKeyInput.value = openAIApiKey ? openAIApiKey : "";
+  
+    databasesContainer.innerHTML = "";
+    const databases = localStorage.getItem("databases");
+    const databaseFieldsets = databases.length > 0 ? JSON.parse(databases) : []
+    
+    databaseFieldsets.forEach((data, index) => {
+      const fieldset = `
+        <fieldset class="settings-custom-database" id="customDatabase_${index}">
+            <h4>Neo4j database connection <span class="settings-custom-database-remove">- remove</span></h4>
+            <div class="field">
+                <label>
+                    Name
+                    <input name="custom_database_${index}_name" value="${data.name}" type="text" />
+                </label>
+            </div>
+            <div class="field">
+                <label>
+                    URI
+                    <input name="custom_database_${index}_uri" value="${data.uri}" type="text" />
+                </label>
+            </div>
+            <div class="field">
+                <label>
+                    Username
+                    <input name="custom_database_${index}_username" value="${data.username}" type="text" />
+                </label>
+            </div>
+              <div class="field">
+                <label>
+                    Password
+                    <input name="custom_database_${index}_password" value="${data.password}" type="password" />
+                </label>
+            </div>
+        </fieldset>
+      `;
+      databasesContainer.innerHTML += fieldset;
+    })
     settingsDialog.showModal();
   });
-  
-  // handle settings UI
-  const openAIApiKey = localStorage.getItem("openAIApiKey");
 
-  const openAIApiKeyInput = document.querySelector("[name='openai_api_key']")
-  openAIApiKeyInput.value = openAIApiKey ? openAIApiKey : "";
+  // handle add database connection
+  const addBtn = document.getElementById('addCustomDatabase');
+  addBtn.addEventListener('click', function() {
+    const lastFieldset = databasesContainer.querySelector('fieldset:last-of-type');
+    const index = lastFieldset ? parseInt(lastFieldset.id.split('_')[1]) + 1 : 0;
 
-//   const customDatabasesContainer = document.getElementById('customDatabasesContainer');
-//   const addBtn = document.getElementById('addCustomDatabase');
+    const fieldset = `
+      <fieldset class="settings-custom-database" id="customDatabase_${index}">
+          <h4>Neo4j database connection <span class="settings-custom-database-remove">- remove</span></h4>
+          <div class="field">
+              <label>
+                  Name
+                  <input name="custom_database_${index}_name" type="text" />
+              </label>
+          </div>
+          <div class="field">
+              <label>
+                  URI
+                  <input name="custom_database_${index}_uri" type="text" />
+              </label>
+          </div>
+          <div class="field">
+              <label>
+                  Username
+                  <input name="custom_database_${index}_username" type="text" />
+              </label>
+          </div>
+            <div class="field">
+              <label>
+                  Password
+                  <input name="custom_database_${index}_password" type="password" />
+              </label>
+          </div>
+      </fieldset>
+    `;
 
-//   const updateCloneAttributes = (clone, newIndex) => {
-//     clone.id = `customDatabase_${newIndex}`;
-//     clone.querySelector('h4').innerHTML = `Database connection <span class="settings-custom-database-remove">- remove</span>`;
+    databasesContainer.innerHTML += fieldset;
+  });
    
-//     let fields = clone.querySelectorAll('input');
-//     fields.forEach(field => {
-//         let newInputName = field.name.split('_')[0] + '_' + field.name.split('_')[1];         
-//         field.name = `${newInputName}_${newIndex}_${field.name.split('_')[3]}`;
-//         field.value = '';
-//     });
-//   };
-
-//   addBtn.addEventListener('click', function() {
-//     const lastFieldset = customDatabasesContainer.querySelector('fieldset:last-of-type');
-//     const newIndex = lastFieldset ? parseInt(lastFieldset.id.split('_')[1]) + 1 : 0;
-//     const clone = lastFieldset.cloneNode(true);
-//     updateCloneAttributes(clone, newIndex);
-//     customDatabasesContainer.appendChild(clone);
-//   });
+  databasesContainer.addEventListener('click', function(e) {
+    if(e.target.classList.contains('settings-custom-database-remove')) {
+      const fieldset = e.target.closest('fieldset');
+      fieldset.remove();
+    }
+  });
   
-//   customDatabasesContainer.addEventListener('click', function(e) {
-//     if(e.target.classList.contains('settings-custom-database-remove')) {
-//         e.target.closest('fieldset').remove();
-//     }
-//   });
-
-  // handle settings save
   const settingsSave = document.getElementById("settingsSave");
-
-  settingsSave.addEventListener("click", function(e) {
-   
+  settingsSave.addEventListener("click", function(e) {   
     e.preventDefault();
     
     const openAIApiKey = document.querySelector('input[name="openai_api_key"]').value;
     localStorage.setItem('openAIApiKey', openAIApiKey);
     
-    // const databases = [];
+    const databases = [];
 
-    // const fieldsets = document.querySelectorAll('.settings-custom-database');
-    // const databaseSelect = document.querySelector('select[name="database"]');
+    const fieldsets = document.querySelectorAll('.settings-custom-database');
+    const customSelectOptions = databaseSelect.querySelectorAll('option[value]');
+    customSelectOptions.forEach(option => {
+      option.remove();
+    });
 
-    // databaseSelect.innerHTML = '';
+    fieldsets.forEach(function(fieldset) {
+        const dbInfo = {
+            name: fieldset.querySelector('input[name*="_name"]').value,
+            uri: fieldset.querySelector('input[name*="_uri"]').value,
+            username: fieldset.querySelector('input[name*="_username"]').value,
+            password: fieldset.querySelector('input[name*="_password"]').value
+        };
+
+        const option = document.createElement('option');
+        option.value = dbInfo.name;
+        option.text = dbInfo.name;
+
+        databaseSelect.appendChild(option);
+        databases.push(dbInfo);
+    });
     
-    // fieldsets.forEach(function(fieldset) {
-    //     const dbInfo = {
-    //         name: fieldset.querySelector('input[name*="name"]').value,
-    //         uri: fieldset.querySelector('input[name*="uri"]').value,
-    //         username: fieldset.querySelector('input[name*="username"]').value,
-    //         password: fieldset.querySelector('input[name*="password"]').value
-    //     };
-
-    //     const option = document.createElement('option');
-    //     option.value = dbInfo.name;
-    //     option.text = dbInfo.name;
-
-    //     databaseSelect.appendChild(option);
-    //     databases.push(dbInfo);
-    // });
-    
-    // // Save the databases array to localStorage as a JSON string
-    // localStorage.setItem('databases', JSON.stringify(databases));
+    // Save the databases array to localStorage as a JSON string
+    localStorage.setItem('databases', JSON.stringify(databases));
 
     settingsDialog.close();
   });
@@ -204,7 +267,7 @@ function handleAskBeforeRequest(event) {
     }
 
     if(databases) {
-        event.detail.requestConfig.parameters["databases"] = databases;
+        event.detail.requestConfig.parameters["clientDatabases"] = databases;
     }
 }
 
@@ -219,13 +282,12 @@ function handleAskAfterRequest() {
   initDownvoteDialog();
 }
 
+function init() {
 
-window.onload = () => {
+  initSettingsDialog();
+
   const lastPrompts = JSON.parse(localStorage.getItem("last_prompts"));
-  // const clientDatabases = JSON.parse(localStorage.getItem("databases"));
-
-  renderLastPrompts(lastPrompts);
-  // renderClientDatabases(clientDatabases);
+  renderLastPrompts(lastPrompts);  
 
   // fill prompt from url if present
   const promptInput = document.getElementById("promptInput");
@@ -235,6 +297,5 @@ window.onload = () => {
     promptInput.value = decodeURIComponent(promptValue.replace(/\+/g, " "));
     updatePromptCount();
   }
+}
 
-  initSettingsDialog();
-};
