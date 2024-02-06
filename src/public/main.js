@@ -107,14 +107,20 @@ function initDownvoteDialog() {
 }
 
 function initSettingsDialog() {
+  
   const settingsTrigger = document.querySelector("#settingsTrigger");
   const settingsDialog = document.querySelector("#settings");
-
+  
   settingsTrigger.addEventListener("click", () => {
     settingsDialog.showModal();
   });
-
+  
   // handle settings UI
+  const openAIApiKey = localStorage.getItem("openAIApiKey");
+
+  const openAIApiKeyInput = document.querySelector("[name='openai_api_key']")
+  openAIApiKeyInput.value = openAIApiKey ? openAIApiKey : "";
+
 //   const customDatabasesContainer = document.getElementById('customDatabasesContainer');
 //   const addBtn = document.getElementById('addCustomDatabase');
 
@@ -145,8 +151,10 @@ function initSettingsDialog() {
 //   });
 
   // handle settings save
-  const settingsSave = document.getElementById("settingsSave")
+  const settingsSave = document.getElementById("settingsSave");
+
   settingsSave.addEventListener("click", function(e) {
+   
     e.preventDefault();
     
     const openAIApiKey = document.querySelector('input[name="openai_api_key"]').value;
